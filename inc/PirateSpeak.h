@@ -12,7 +12,7 @@ class Pirate {
     public:
         string translateWord(string word){
             //TODO: Enter the path to the text file in the double quotes
-            ifstream fin("", ios::in);
+            ifstream fin("../files/pirate.csv", ios::in);
             string english, pirate;
 
             //TODO: The way that an ifstream works is that it reads everything in the 
@@ -24,11 +24,32 @@ class Pirate {
             //      4) if the english word equals the word that is being passed,
             //         then close the file and return the pirate word
             //      5) otherwise, close the file and just return the word being passed
+            if (!fin.is_open()) {
+                return word;
+            }
+
+            while (getline(fin, english, ',')) {
+                getline(fin, pirate);
+
+                if (english == word) {
+                    fin.close();
+                    return pirate;
+                }
+            }
+
+            fin.close();
+            return word;
         }
 
         void addToFile(string english, string pirate){
             //TODO: append the passed words to the csv file and close the file
             //      remember to delimit the words with a comma
+             ofstream fout("../files/pirate.csv", ios::app);
+
+            if (fout.is_open()) {
+                fout << english << "," << pirate << endl;
+                fout.close();
+            }
         }
 };
 #endif
